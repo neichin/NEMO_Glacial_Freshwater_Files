@@ -6,6 +6,8 @@ sys.path.append('/Users/imerino/Documents/These/python/data')
 from data import *
 
 
+factor= 1e12/365/24/3600 #Convert from GT/a to Kg/s
+
 #---Clean the bathymetry applying a threshold. 0 in land points, value in ocean points.
 def cleanBathy(var,value):
     var = var*(var==0.0) + value*(var>0.0)
@@ -59,6 +61,55 @@ def getIceShelfSegmentPoints(IceShelfLimits,xP,yP,varLon,varLat):
             #im=plt.scatter(listX, listY,s=10, marker='s',edgecolor='none',c=colors[indexColor],label=i)  
             
         return XIceShelf,YIceShelf,PointsPerSegment,NumOfSegments
+
+
+#createIceShelfFluxFile       
+#---Filling up a grid field with freshwaterfluxes rates (kg/m2/s) from a list of ice shelves or sectors
+#   Inputs:
+#       varRunoff:Variable to fill up with the calving rates
+#       listIceShelves: list of ice shelves or sectors. Must be defined with the same name in data.py
+#       xP: List of X grid coordinates of the Coastal points previously extracted
+#       yP: List of Y grid coordinates of the Coastal points previously extracted
+#       varLon: Longitude field over the same grid where XP and YP are defined
+#       varLat: Latitude field over the same grid where XP and YP are defined
+#       area: Grid file in the same dimensions than varRunoff with the area in meters
+#
+#   Output:
+#       CalvingVar: the grid field filled up
+def createIceShelfFluxFile(varRunoff,listIceShelves,xP,yP,varLon,varLat,area):
+    for shelf in listIceShelves:
+        #Needed data to fill up per Ice Shelf 
+        XIceShelf=[] #Container of X grid position of all the segments of an ice shelf
+        YIceShelf=[] #Container of Y grid position of all the segments of an ice shelf
+        NumOfSegments=0 #Number of segments
+        PointsPerSegment=[] #Grid points per segment (dim=NumOfSegments)
+        
+        limits=globals()[shelf]#Get geospatial limits of the iceshelf i from data.py. It may be made by segments
+        
+        if shelf in valuesIS:
+            FWF=-1*valuesIS[shelf]
+            print shelf,FWF
+        elif shelf in  upscaling:
+            FWF=-1*upscaling[shelf]
+        else:
+            print 'ERROR shelf or sector not found'
+        
+        XIceShelf,YIceShelf,PointsPerSegment,NumOfSegments = getIceShelfSegmentPoints(limits,xP,yP,varLon,varLat)
+        
+        numPoints=np.size(XIceShelf)
+        print numPoints
+        
+        freshVal=FWF*factor/numPoints #Share the Gt/yr between all the points which belong to the IS
+        print freshVal
+        print varRunoff[:,YIceShelf,XIceShelf]+(freshVal)/area[YIceShelf,XIceShelf]
+        
+        varRunoff[:,YIceShelf,XIceShelf]=varRunoff[:,YIceShelf,XIceShelf]+(freshVal)/area[YIceShelf,XIceShelf] #units are KG/m2/s, we divide by the area
+        print np.sum(varRunoff[0,:,:])
+        print np.sum(varRunoff[0,:,:]*area/factor)
+        
+
+    return varRunoff
+
 
 #createCalvingFile       
 #---Filling up a grid field with calving rates from a list of ice shelves or sectors
