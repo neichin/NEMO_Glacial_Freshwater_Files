@@ -54,7 +54,9 @@ yP=zip(*listP)[1]
 createCalvingFile(CalvingFlux,listShelf,distSourcesShelf,xP,yP,varLon,varLat)
 createCalvingFile(CalvingFlux,listSectors,distSourcesSectors,xP,yP,varLon,varLat)
 
-ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/calvingORCA12_Depoorter2013.nc','a')
-calv = ncfile.variables['calvingFlux']
-calv[:,:]=CalvingFlux[:,:]
-ncfile.close()
+#CalvingFlux writen in km3/yr as needed by NEMO/ICB
+
+#ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/calving.nc','a')
+#calv = ncfile.variables['calvingFlux']
+#calv[:,:]=CalvingFlux[:,:]
+#ncfile.close()

@@ -96,12 +96,15 @@ def createIceShelfFluxFile(varRunoff,listIceShelves,xP,yP,varLon,varLat,area):
         
         XIceShelf,YIceShelf,PointsPerSegment,NumOfSegments = getIceShelfSegmentPoints(limits,xP,yP,varLon,varLat)
         
-        numPoints=np.size(XIceShelf)
+        #Avoid points represented twice list=list(set(points))
+        points=zip(XIceShelf,YIceShelf)
+        listPoints=list(set(points))
+        xPoints=zip(*listPoints)[0]
+        yPoints=zip(*listPoints)[1]
         
+        numPoints=np.size(xPoints)
         freshVal=FWF*factor/numPoints #Share the Gt/yr between all the points which belong to the IS
-        
-        for j,i in zip(YIceShelf,XIceShelf): #Looping the points cause some grid points appears twice (whenan ocean point is touching land by two or more sides), so double flux should be considered 
-            varRunoff[:,j,i]=varRunoff[:,j,i]+(freshVal)/area[j,i] #units are KG/m2/s, we divide by the area
+        varRunoff[:,yPoints,xPoints]=varRunoff[:,yPoints,xPoints]+(freshVal)/area[yPoints,xPoints] #units are KG/m2/s, we divide by the area
             
     return varRunoff
 

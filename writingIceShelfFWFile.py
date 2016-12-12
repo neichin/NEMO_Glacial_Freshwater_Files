@@ -56,4 +56,11 @@ yP=zip(*listP)[1]
 
 ####### Fill calving flux variable with data from the list of shelves and sectors   
 createIceShelfFluxFile(FreshwaterFlux,listShelf,xP,yP,varLon,varLat,area)
-#createIceShelfFluxFile(FreshwaterFlux,listSectors,xP,yP,varLon,varLat,area)
+createIceShelfFluxFile(FreshwaterFlux,listSectors,xP,yP,varLon,varLat,area)
+
+#FreshwaterFlux writen in kg/m2/s as needed by NEMO
+
+#ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/melting.nc','a')
+#calv = ncfile.variables['meltingFlux']
+#calv[:,:]=CalvingFlux[:,:]
+#ncfile.close()
