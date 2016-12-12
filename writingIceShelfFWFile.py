@@ -6,12 +6,12 @@ from NEMO_ICB_File import *
 
 
 #List of Ice shelves to consider#
-#listShelf=['lbc','fris','brl','jf','ar','ne','ais','w','sha','van','tot','mu','por','ade','mer','nin','coo','ren','dry','ris','sul','lan'
-#            ,'getz','cd','thw','pig','cosg','abb','ven','geo','wor']
+listShelf=['lbc','fris','brl','jf','ar','ne','ais','w','sha','van','tot','mu','por','ade','mer','nin','coo','ren','dry','ris','sul','lan'
+            ,'getz','cd','thw','pig','cosg','abb','ven','geo','wor']
 
 listSectors=['westIndian','eastIndian','rossSea','amundsen','bellingshausen','weddell']
 
-listShelf=['pig']
+#listShelf=['pig']
 #First coastal point, needed to use extractCoastNew. It is an ocean point with land at (x,y-1)
 xinit=28
 yinit=863
