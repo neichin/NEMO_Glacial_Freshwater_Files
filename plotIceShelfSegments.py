@@ -51,10 +51,6 @@ area=e1t*e1t
 var=cleanBathy(var,1000)
 ########
 
-######## Create rmpty calving flux variable
-FreshwaterFlux=np.zeros([12,ydim,xdim])
-########
-
 ######## Extract the list of consecutive coastal points
 listP=extractCoast(var,xinit,yinit)
 #List of X and Y values in the grid referencial
@@ -65,7 +61,7 @@ yP=zip(*listP)[1]
 
 plt.figure(1)
 
-#Default pot
+#Default plot
 ax=plt.imshow(var,cmap='Greys_r')
 
 #Plot individualy each ice shelf

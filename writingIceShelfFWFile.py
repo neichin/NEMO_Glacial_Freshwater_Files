@@ -16,12 +16,6 @@ listSectors=['westIndian','eastIndian','rossSea','amundsen','bellingshausen','we
 xinit=28
 yinit=863
 
-#Distance between calving sources in shelves
-distSourcesShelf = 50
-#Distance between calving sources in sectors
-distSourcesSectors = 150
-#########
-
 
 #Open needed Files
 ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/AA12_bathymetry_v2.4.nc','a')
@@ -43,7 +37,7 @@ area=e1t*e1t
 var=cleanBathy(var,1000)
 ########
 
-######## Create rmpty calving flux variable
+######## Create rmpty fresh flux variable (units:kg/m2/s)
 FreshwaterFlux=np.zeros([12,ydim,xdim])
 ########
 
@@ -54,13 +48,13 @@ xP=zip(*listP)[0]
 yP=zip(*listP)[1]
 #####
 
-####### Fill calving flux variable with data from the list of shelves and sectors   
+####### Fill freshwater flux variable with data from the list of shelves and sectors   
 createIceShelfFluxFile(FreshwaterFlux,listShelf,xP,yP,varLon,varLat,area)
 createIceShelfFluxFile(FreshwaterFlux,listSectors,xP,yP,varLon,varLat,area)
 
 #FreshwaterFlux writen in kg/m2/s as needed by NEMO
 
 #ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/melting.nc','a')
-#calv = ncfile.variables['meltingFlux']
-#calv[:,:]=CalvingFlux[:,:]
+#fw = ncfile.variables['meltingFlux']
+#fw[:,:]=FreshwaterFlux[:,:]
 #ncfile.close()
