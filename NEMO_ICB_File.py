@@ -146,6 +146,47 @@ def createCalvingFile(CalvingVar,listIceShelves,MaxPointsPerCalvingP,xP,yP,varLo
     return CalvingVar
 
 
+#writeDepthFwFluxes       
+#---Filling up a grid field with a typical grounding line depth and calving front depth of a list of ice shelves
+#   Inputs:
+#       varGL:Variable to fill up with the grounding line depth definded in data.py
+#       varFront:Variable to fill up with the calving front depth defined in data.py
+#       varBathy:Variable with the bathymetry depth
+#       listIceShelves: list of ice shelves or sectors. Must be defined with the same name in data.py
+#       xP: List of X grid coordinates of the Coastal points previously extracted
+#       yP: List of Y grid coordinates of the Coastal points previously extracted
+#       varLon: Longitude field over the same grid where XP and YP are defined
+#       varLat: Latitude field over the same grid where XP and YP are defined
+#
+#   Output:
+#       varGL,varFront
+def writeDepthFwFluxes(varGL,varFront,varBathy,listIceShelves,xP,yP,varLon,varLat):
+    for shelf in listIceShelves:
+        #Needed data to fill up per Ice Shelf 
+        XIceShelf=[] #Container of X grid position of all the segments of an ice shelf
+        YIceShelf=[] #Container of Y grid position of all the segments of an ice shelf
+        NumOfSegments=0 #Number of segments
+        PointsPerSegment=[] #Grid points per segment (dim=NumOfSegments)
+        
+        limits=globals()[shelf]#Get geospatial limits of the iceshelf i from data.py. It may be made by segments
+        
+        if shelf in valuesIS:
+            Gldepth=valuesGL[shelf]
+            Frdepth=valuesFront[shelf]
+        elif shelf in  upscaling:
+            Gldepth=0.0
+            Frdepth=0.0
+        else:
+            print 'ERROR shelf or sector not found'
+        
+        XIceShelf,YIceShelf,PointsPerSegment,NumOfSegments = getIceShelfSegmentPoints(limits,xP,yP,varLon,varLat)
+
+        # the value to write is the shallower depth between the proposed value and the grid bathymetry
+        varGL[:,YIceShelf,XIceShelf]=np.minimum(varBathy[YIceShelf,XIceShelf],(varBathy[YIceShelf,XIceShelf]-varBathy[YIceShelf,XIceShelf]+Gldepth))
+        varFront[:,YIceShelf,XIceShelf]=np.minimum(varBathy[YIceShelf,XIceShelf],(varBathy[YIceShelf,XIceShelf]-varBathy[YIceShelf,XIceShelf]+Frdepth))
+
+    return varGL,varFront
+
 #getNearestPoint
 #---Return the index corresponding to the list of X and Y values (listPx and lisPy respectively) which is closer to the lon lat values
 def getNearestPoint(listPx,listPy,varLon,varLat,lonPoint,latPoint):

@@ -19,7 +19,7 @@ yinit=863
 
 #Open needed Files
 ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/AA12_bathymetry_v2.4.nc','a')
-var = np.array(ncfile.variables['Bathymetry'])[:,:]
+varBathy = np.array(ncfile.variables['Bathymetry'])[:,:]
 ncfile.close()
 
 ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/AA12_coordinates.nc','a')
@@ -31,14 +31,16 @@ ncfile.close()
 ###########
 area=e1t*e1t
 
-[ydim,xdim]=var.shape
+[ydim,xdim]=varBathy.shape
 
 #######1Clean the Bathymetry, 0->land, 1000->ocean
-var=cleanBathy(var,1000)
+var=cleanBathy(varBathy,1000)
 ########
 
 ######## Create rmpty fresh flux variable (units:kg/m2/s)
 FreshwaterFlux=np.zeros([12,ydim,xdim])
+varGL=np.zeros([12,ydim,xdim])
+varFront=np.zeros([12,ydim,xdim])
 ########
 
 ######## Extract the list of consecutive coastal points
@@ -52,9 +54,14 @@ yP=zip(*listP)[1]
 createIceShelfFluxFile(FreshwaterFlux,listShelf,xP,yP,varLon,varLat,area)
 createIceShelfFluxFile(FreshwaterFlux,listSectors,xP,yP,varLon,varLat,area)
 
+writeDepthFwFluxes(varGL,varFront,varBathy,listShelf,xP,yP,varLon,varLat)
+
 #FreshwaterFlux writen in kg/m2/s as needed by NEMO
 
 #ncfile = netCDF4.Dataset('/Users/imerino/Documents/Freshwater_Orca12/melting.nc','a')
 #fw = ncfile.variables['meltingFlux']
-#fw[:,:]=FreshwaterFlux[:,:]
+#dMax = ncfile.variables['sodepmax_isf']
+#dMin = ncfile.variables['sodepmin_isf']
+#dMax[:,:,:]=varGL[:,:,:]
+#dMin[:,:,:]=varFront[:,:,:]
 #ncfile.close()

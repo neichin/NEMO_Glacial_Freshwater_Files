@@ -28,6 +28,19 @@ upscaling={'westIndian':-40,'eastIndian':-82,'rossSea':-12,'amundsen':-89,'belli
 #Upscalling values for the calving flux in Gt/yr from Depoorter2013
 upscalingIB={'westIndian':49,'eastIndian':93,'rossSea':14,'amundsen':34,'bellingshausen':10,'weddell':16}
 
+#Typical GL depth in meters. Defined arbitrary from BEDMAP2
+valuesGL= {'ar':600, 'ne':450, 'ais': 200, 'w': 1000, 'sha':1200, 'van':1000, 'tot':1800,
+'mu':2000, 'por':600,'ade':1000,'mer':1000,'nin':1000,'coo':600,'ren':1000, 'dry':900,'ris':1000,
+'sul':1000,'lan':600,'getz':700,'cd':1000,'thw':800,'pig':900,'cosg':500, 'abb':500,'ven':400,
+'geo':1000,'wor':200,'lbc':700,'fris':1500,'brl':850,'jf':800}
+
+#Typical Calving front depth in meters. Defined arbitrary from BEDMAP2
+valuesFront= {'ar':200, 'ne':200, 'ais': 250, 'w': 200, 'sha':200, 'van':200, 'tot':350,
+'mu':350, 'por':300,'ade':200,'mer':250,'nin':300,'coo':250,'ren':200, 'dry':200,'ris':200,
+'sul':200,'lan':230,'getz':330,'cd':250,'thw':250,'pig':300,'cosg':280, 'abb':250,'ven':300,
+'geo':200,'wor':150,'lbc':200,'fris':200,'brl':200,'jf':200}
+
+
 
 #Iceshelves of segments,
 #every two values is a lon,lat pair definiing a segment
