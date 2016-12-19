@@ -54,6 +54,7 @@ yP=zip(*listP)[1]
 createIceShelfFluxFile(FreshwaterFlux,listShelf,xP,yP,varLon,varLat,area)
 createIceShelfFluxFile(FreshwaterFlux,listSectors,xP,yP,varLon,varLat,area)
 
+####### Fill GL and claving front depths with data from the list of shelves 
 writeDepthFwFluxes(varGL,varFront,varBathy,listShelf,xP,yP,varLon,varLat)
 
 #FreshwaterFlux writen in kg/m2/s as needed by NEMO
